@@ -5,4 +5,5 @@ import kids.youtube.channels.model.Channel
 interface ChannelView: View {
     fun showChannel(channels: List<Channel>)
     fun showEmptyList()
+    fun setPageToken(pageToken: String)
 }

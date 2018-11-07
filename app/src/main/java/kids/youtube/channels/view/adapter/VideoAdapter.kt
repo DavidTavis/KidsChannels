@@ -31,8 +31,7 @@ class VideoAdapter (private val videos : List<Video>, private val context: Conte
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val video = videos[position]
-//        holder.imageView.setImageResource(video.image)
-        mPicasso.load(video.image).placeholder(R.drawable.aviator).error(R.drawable.aviator).into(holder.imageView)
+        mPicasso.load(video.image).placeholder(R.mipmap.empty_photo).error(R.mipmap.empty_photo).into(holder.imageView)
         holder.textView.text = video.title
     }
 

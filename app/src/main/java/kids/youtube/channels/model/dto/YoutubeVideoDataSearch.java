@@ -3,15 +3,7 @@ package kids.youtube.channels.model.dto;
 import java.util.List;
 
 public class YoutubeVideoDataSearch  extends  YoutubeVideoData{
-//    @SerializedName("nextPageToken")
-//    @Expose
-//    public String nextPageToken;
-//    @SerializedName("pageInfo")
-//    @Expose
-//    public PageInfo pageInfo;
-//    @SerializedName("items")
-//    @Expose
-//    public List<Item> items = null;
+
 
     /**
      * No args constructor for use in serialization
