@@ -1,7 +1,8 @@
 package kids.youtube.channels.model
 
 data class Channel(
-        val title : String = "",
-        val channelId : String = "",
-        val video : List<Video>
+        var title: String = "",
+        var channelId: String = "",
+        var videos: List<Video>,
+        var token: String = ""
 )
