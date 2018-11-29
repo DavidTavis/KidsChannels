@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".view.MainActivity">
 
     <EditText
@@ -16,6 +16,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar
+        android:id="@+id/prgLoading"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_channels"
+        app:layout_constraintEnd_toEndOf="@+id/rv_channels"
+        app:layout_constraintHorizontal_bias="0.562"
+        app:layout_constraintStart_toStartOf="@+id/rv_channels"
+        app:layout_constraintTop_toTopOf="@+id/rv_channels"
+        app:layout_constraintVertical_bias="0.535"
+        app:mlpb_enable_circle_background="true" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_channels"

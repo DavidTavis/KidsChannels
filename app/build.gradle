@@ -44,4 +44,6 @@ dependencies {
     implementation 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.4.0'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
+    implementation 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
 }

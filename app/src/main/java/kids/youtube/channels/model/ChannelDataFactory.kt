@@ -15,26 +15,31 @@ class ChannelDataFactory(val presenter: Presenter) {
     companion object {
         var channelToken = ""
         var channels = mutableListOf<Channel>()
+        var newMoreChannels = mutableListOf<Channel>()
     }
+
+    var loadMoreChannels = false
     private var count = 0
-//    private var channels = mutableListOf<Channel>()
     private val channelIds = mutableListOf<Pair<String, String>>()
 
     fun searchChannel(query: String) {
+        channels.clear()
         getChannels(query, "")
     }
 
     fun loadMoreChannel(query: String) {
-        Log.d("myTag", "channelToken = $channelToken")
-        if (!channelToken.equals(""))
+        if (!channelToken.equals("")) {
+            count = 0
+            newMoreChannels.clear()
             getChannels(query, channelToken)
+        }
     }
 
     private fun getChannels(query: String, pageToken: String) {
 
         Rx2AndroidNetworking.get("https://www.googleapis.com/youtube/v3/search")
                 .addQueryParameter("q", query)
-                .addQueryParameter("maxResult", "25")
+                .addQueryParameter("maxResult", "5")
                 .addQueryParameter("part", "snippet")
                 .addQueryParameter("type", "channel")
                 .addQueryParameter("key", "AIzaSyAzy4gma2A2I9iqOPwBzgkEr_3_5-5cz5I")
@@ -45,12 +50,16 @@ class ChannelDataFactory(val presenter: Presenter) {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<YoutubeChannelSearch> {
                     override fun onSubscribe(d: Disposable) {
+//                        presenter.onShowProgress()
                     }
 
                     override fun onComplete() {
-                        if (count < channelIds.size) {
+                        if (channelIds.size > 0) {
                             getVideo(channelIds[count].first, channelIds[count].second)
                             count++
+                        } else {
+//                            presenter.onHideProgress()
+                            presenter.onShowEmptyList()
                         }
                     }
 
@@ -60,7 +69,7 @@ class ChannelDataFactory(val presenter: Presenter) {
 
                     override fun onNext(youtubeChannelSearch: YoutubeChannelSearch) {
 
-                        channelToken = if(youtubeChannelSearch.nextPageToken == null)
+                        channelToken = if (youtubeChannelSearch.nextPageToken == null)
                             ""
                         else
                             youtubeChannelSearch.nextPageToken
@@ -74,7 +83,7 @@ class ChannelDataFactory(val presenter: Presenter) {
 
     private fun getVideo(channelTitle: String, channelID: String) {
         Rx2AndroidNetworking.get("https://www.googleapis.com/youtube/v3/search")
-                .addQueryParameter("maxResult", "25")
+                .addQueryParameter("maxResult", "5")
                 .addQueryParameter("part", "snippet")
                 .addQueryParameter("type", "video")
                 .addQueryParameter("key", "AIzaSyAzy4gma2A2I9iqOPwBzgkEr_3_5-5cz5I")
@@ -92,7 +101,12 @@ class ChannelDataFactory(val presenter: Presenter) {
                             getVideo(channelIds[count].first, channelIds[count].second)
                             count++
                         } else
-                            presenter.onShow(channels)
+//                            presenter.onHideProgress()
+                            if (!loadMoreChannels) {
+                                presenter.onShow(channels)
+                            } else {
+                                presenter.onShowMoreChannel(newMoreChannels)
+                            }
                     }
 
                     override fun onError(e: Throwable) {
@@ -101,7 +115,7 @@ class ChannelDataFactory(val presenter: Presenter) {
 
                     override fun onNext(youtubeChannelSearch: YoutubeChannelSearch) {
                         val videos = mutableListOf<Video>()
-                        val videoToken = if(youtubeChannelSearch.nextPageToken == null)
+                        val videoToken = if (youtubeChannelSearch.nextPageToken == null)
                             ""
                         else
                             youtubeChannelSearch.nextPageToken
@@ -112,18 +126,22 @@ class ChannelDataFactory(val presenter: Presenter) {
 
                         val channel = Channel(channelTitle, channelID, videos, videoToken)
 
-                        channels.add(channel)
+                        if (loadMoreChannels) {
+                            newMoreChannels.add(channel)
+                        } else
+                            channels.add(channel)
                     }
                 })
     }
 
-    fun loadMoreVideo(position: Int) {
+    fun getMoreVideo(position: Int) {
+        val videos = mutableListOf<Video>()
         Rx2AndroidNetworking.get("https://www.googleapis.com/youtube/v3/search")
                 .addQueryParameter("maxResult", "25")
                 .addQueryParameter("part", "snippet")
                 .addQueryParameter("type", "video")
                 .addQueryParameter("key", "AIzaSyAzy4gma2A2I9iqOPwBzgkEr_3_5-5cz5I")
-                .addQueryParameter("channelId",  channels[position].channelId)
+                .addQueryParameter("channelId", channels[position].channelId)
                 .addQueryParameter("pageToken", channels[position].token)
                 .build()
                 .getObjectObservable(YoutubeChannelSearch::class.java)
@@ -134,8 +152,7 @@ class ChannelDataFactory(val presenter: Presenter) {
                     }
 
                     override fun onComplete() {
-                        presenter.onShow(channels)
-                        Log.d("mytag", "onComplete loadMoreVideo")
+                        presenter.onShowMoreVideo(videos)
                     }
 
                     override fun onError(e: Throwable) {
@@ -143,9 +160,9 @@ class ChannelDataFactory(val presenter: Presenter) {
                     }
 
                     override fun onNext(youtubeChannelSearch: YoutubeChannelSearch) {
-                        val videos = mutableListOf<Video>()
 
-                        val videoToken = if(youtubeChannelSearch.nextPageToken == null)
+
+                        val videoToken = if (youtubeChannelSearch.nextPageToken == null)
                             ""
                         else
                             youtubeChannelSearch.nextPageToken
