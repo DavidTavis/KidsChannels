@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <fragment
+        android:id="@+id/youtube_player_fragment"
+        class="com.google.android.youtube.player.YouTubePlayerSupportFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:layout_below="@+id/youtube_player_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/lytRetry"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:visibility="gone">
+            <TextView
+                android:id="@+id/lblAlert"
+                android:text="@string/no_internet_connection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="#76ac3b"/>
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/raisedRetry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#76ac3b"
+                android:text="@string/retry"
+                android:theme="@style/RaisedButtonStyle"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/lblNoResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_result"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:textColor="@color/colorAccent"
+            android:textSize="12sp" />
+
+        <com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar
+            android:id="@+id/prgLoading"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            app:mlpb_enable_circle_background="true"/>
+
+
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

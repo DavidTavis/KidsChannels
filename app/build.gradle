@@ -46,4 +46,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
     implementation 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
+    implementation 'com.marshalchen.ultimaterecyclerview:library:0.3.18'
+    implementation files('libs/YouTubeAndroidPlayerApi.jar')
+
 }

@@ -121,7 +121,8 @@ class ChannelDataFactory(val presenter: Presenter) {
                             youtubeChannelSearch.nextPageToken
 
                         for (i in youtubeChannelSearch.items.indices) {
-                            videos.add(Video(youtubeChannelSearch.items.get(i).snippet.thumbnails._default.url, youtubeChannelSearch.items.get(i).snippet.title))
+                            val item = youtubeChannelSearch.items.get(i);
+                            videos.add(Video(item.snippet.thumbnails._default.url, item.snippet.title, item.id.videoId))
                         }
 
                         val channel = Channel(channelTitle, channelID, videos, videoToken)
@@ -161,14 +162,14 @@ class ChannelDataFactory(val presenter: Presenter) {
 
                     override fun onNext(youtubeChannelSearch: YoutubeChannelSearch) {
 
-
                         val videoToken = if (youtubeChannelSearch.nextPageToken == null)
                             ""
                         else
                             youtubeChannelSearch.nextPageToken
 
                         for (i in youtubeChannelSearch.items.indices) {
-                            videos.add(Video(youtubeChannelSearch.items.get(i).snippet.thumbnails._default.url, youtubeChannelSearch.items.get(i).snippet.title))
+                            val item = youtubeChannelSearch.items.get(i);
+                            videos.add(Video(item.snippet.thumbnails._default.url, item.snippet.title, item.id.videoId))
                         }
 
                         (channels[position].videos as ArrayList).addAll(videos)
