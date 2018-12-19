@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso
 
 
 
-class VideoAdapter ( val videos : List<Video>,  val context: Context)
+class VideoAdapter ( val videos : ArrayList<Video>,  val context: Context)
     : RecyclerView.Adapter<VideoAdapter.ViewHolder>() {
 
     val mPicasso = Picasso.with(context)

@@ -57,7 +57,11 @@
             android:visibility="gone"
             app:mlpb_enable_circle_background="true"/>
 
-
+        <com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
+            android:id="@+id/video_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.marshalchen.ultimaterecyclerview.UltimateRecyclerView>
 
 
     </RelativeLayout>

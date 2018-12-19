@@ -1,33 +1,38 @@
 package kids.youtube.channels.view
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
+import com.marshalchen.ultimaterecyclerview.RecyclerItemClickListener
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
 import kids.youtube.channels.R
+import kids.youtube.channels.model.Video
+import kids.youtube.channels.view.adapter.VideoAdapter
+
 
 class ActivityChannelVideo: AppCompatActivity() {
 
     private var videoId: String? = null
     private val TAG = "mytag"
-    private val recyclerView: RecyclerView? = null
+    private var recyclerView: UltimateRecyclerView? = null
 
     private var youTubePlayerFragment: YouTubePlayerSupportFragment? = null
-    private val youtubeVideoArrayList: ArrayList<String>? = null
+    lateinit var youtubeVideoArrayList: ArrayList<Video>
     private var youTubePlayer: YouTubePlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.channel_video_fragment)
-        videoId = intent.extras.getString(EXTRA_MESSAGE)
-//        generateDummyVideoList();
-        initializeYoutubePlayer();
-//        setUpRecyclerView();
-//        populateRecyclerView();
+
+        videoId = intent.extras.getString(EXTRA_MESSAGE_VIDEO_ID)
+        youtubeVideoArrayList = intent.getParcelableArrayListExtra(EXTRA_MESSAGE_VIDEO_LIST)
+
+        initializeYoutubePlayer()
+        setUpRecyclerView()
     }
 
     private fun initializeYoutubePlayer() {
@@ -60,5 +65,26 @@ class ActivityChannelVideo: AppCompatActivity() {
             }
         })
     }
+
+    private fun setUpRecyclerView() {
+        recyclerView = findViewById(R.id.video_list)
+
+        recyclerView?.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = VideoAdapter(youtubeVideoArrayList, context)
+            setHasFixedSize(true)
+        }
+        recyclerView!!.addOnItemTouchListener(RecyclerItemClickListener(this, object : RecyclerItemClickListener.OnItemClickListener {
+            override fun onItemClick(view: android.view.View?, position: Int) {
+                if (youTubePlayerFragment != null && youTubePlayer != null) {
+                    //update selected position
+//                    recyclerView!!.adapter.setSelectedPosition(position)
+
+                    youTubePlayer!!.cueVideo(youtubeVideoArrayList[position].videoId)
+                }
+            }
+        }))
+    }
+
 
 }

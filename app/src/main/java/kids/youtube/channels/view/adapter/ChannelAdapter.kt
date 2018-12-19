@@ -51,7 +51,8 @@ class ChannelAdapter(var channels: List<Channel>, private var presenter: Channel
         holder.recyclerView.addOnItemTouchListener(RecyclerItemClickListener(holder.recyclerView.context, object : RecyclerItemClickListener.OnItemClickListener{
             override fun onItemClick(view: View?, position: Int) {
                 Log.d("mytag", "click. channel = " + channel.title + " video = " + channel.videos[position].title)
-                (activity as MainActivity).onVideoSelected(channel.videos[position])
+//                (activity as MainActivity).onVideoSelected(channel.videos[position])
+                (activity as MainActivity).onVideoSelected(channel, position)
             }
         }))
     }
@@ -73,7 +74,7 @@ class ChannelAdapter(var channels: List<Channel>, private var presenter: Channel
 
     fun insertMoreVideo(videos: List<Video>) {
         val startPosition = currentVideoAdapter.videos.size
-        (currentVideoAdapter.videos as ArrayList).addAll(videos)
+        currentVideoAdapter.videos.addAll(videos)
         currentVideoAdapter.notifyItemRangeInserted(startPosition, videos.size)
     }
 
@@ -88,6 +89,6 @@ class ChannelAdapter(var channels: List<Channel>, private var presenter: Channel
     }
 
     interface VideoSelectedListener{
-        fun onVideoSelected(video: Video)
+        fun onVideoSelected(channel: Channel, position: Int)
     }
 }

@@ -125,7 +125,7 @@ class ChannelDataFactory(val presenter: Presenter) {
                             videos.add(Video(item.snippet.thumbnails._default.url, item.snippet.title, item.id.videoId))
                         }
 
-                        val channel = Channel(channelTitle, channelID, videos, videoToken)
+                        val channel = Channel(channelTitle, channelID, videos as ArrayList<Video>, videoToken)
 
                         if (loadMoreChannels) {
                             newMoreChannels.add(channel)
@@ -172,7 +172,7 @@ class ChannelDataFactory(val presenter: Presenter) {
                             videos.add(Video(item.snippet.thumbnails._default.url, item.snippet.title, item.id.videoId))
                         }
 
-                        (channels[position].videos as ArrayList).addAll(videos)
+                        channels[position].videos.addAll(videos)
                         channels[position].token = videoToken
                     }
                 })
